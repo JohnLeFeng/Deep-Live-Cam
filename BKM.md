@@ -1,10 +1,25 @@
-**Clone Repo**
+**Set up Your Platform**
+
+-   Python (3.11 recommended, 3.12 works)
+-   pip
+-   git
+-   ffmpeg - Ref: [link](https://vocus.cc/article/64701a2cfd897800014daed0)
+-   [Visual Studio 2022 Runtimes (Windows)](https://visualstudio.microsoft.com/visual-cpp-build-tools/)
+
+**Clone the Repository**
 
 ```bash
 git clone https://github.com/JohnLeFeng/Deep-Live-Cam.git
 cd Deep-Live-Cam
 git checkout yep
 ```
+
+**Download the Models**
+
+1. [GFPGANv1.4](https://huggingface.co/hacksider/deep-live-cam/resolve/main/GFPGANv1.4.pth)
+2. [inswapper\_128.onnx](https://huggingface.co/ezioruan/inswapper_128.onnx/blob/main/inswapper_128.onnx)
+
+Place these files in the "**models**" folder.
 
 **Install Dependencies**
 
