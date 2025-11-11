@@ -24,6 +24,6 @@ pip install -r requirements.txt
 
 3. Usage:
 
-```bash
-python run.py --execution-provider openvino
-```
+    ```bash
+    python run.py --execution-provider openvino
+    ```
