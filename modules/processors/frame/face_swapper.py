@@ -69,27 +69,47 @@ def get_face_swapper() -> Any:
             model_path = os.path.join(models_dir, model_name)
             update_status(f"Loading face swapper model from: {model_path}", NAME)
             try:
-                # Ensure the providers list is correctly passed
-                # Apply CoreML optimization for Mac systems
-                FACE_SWAPPER = insightface.model_zoo.get_model(
-                    model_path,
-                    providers=[
-                        (
+                if "OpenVINOExecutionProvider" in modules.globals.execution_providers:
+                    print ("FACE_SWAPPER - modules.globals.execution_providers: ", "OpenVINOExecutionProvider")
+                    # config_dict = {
+                    #     "GPU.1": {
+                    #         "CACHE_DIR": "./model_cache",
+                    #         "PERFORMANCE_HINT": "LATENCY"
+                    #     }
+                    # }
+                    config_dict = {
+                        "NPU": {
+                            "CACHE_DIR": "./model_cache",
+                            "PERFORMANCE_HINT": "LATENCY"
+                        }
+                    }
+                    import json
+                    config_json = json.dumps(config_dict)
+                    # options = {"device_type": "GPU.1", 'load_config' : config_json}
+                    options = {"device_type": "NPU", 'load_config' : config_json}
+                    FACE_SWAPPER = insightface.model_zoo.get_model(model_path, providers=[("OpenVINOExecutionProvider", options)])
+                else:
+                    # Ensure the providers list is correctly passed
+                    # Apply CoreML optimization for Mac systems
+                    FACE_SWAPPER = insightface.model_zoo.get_model(
+                        model_path,
+                        providers=[
                             (
-                                "CoreMLExecutionProvider",
-                                {
-                                    "ModelFormat": "MLProgram",
-                                    "MLComputeUnits": "CPUAndGPU",
-                                    "SpecializationStrategy": "FastPrediction",
-                                    "AllowLowPrecisionAccumulationOnGPU": 1,
-                                },
+                                (
+                                    "CoreMLExecutionProvider",
+                                    {
+                                        "ModelFormat": "MLProgram",
+                                        "MLComputeUnits": "CPUAndGPU",
+                                        "SpecializationStrategy": "FastPrediction",
+                                        "AllowLowPrecisionAccumulationOnGPU": 1,
+                                    },
+                                )
+                                if p == "CoreMLExecutionProvider"
+                                else p
                             )
-                            if p == "CoreMLExecutionProvider"
-                            else p
-                        )
-                        for p in modules.globals.execution_providers
-                    ],
-                )
+                            for p in modules.globals.execution_providers
+                        ],
+                    )
                 update_status("Face swapper model loaded successfully.", NAME)
             except Exception as e:
                 update_status(f"Error loading face swapper model: {e}", NAME)
