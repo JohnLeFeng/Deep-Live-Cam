@@ -1,6 +1,6 @@
 **Set up Your Platform**
 
--   Python (3.11 recommended, 3.12 works)
+-   Python 3.11
 -   pip
 -   git
 -   ffmpeg - Ref: [link](https://vocus.cc/article/64701a2cfd897800014daed0)
@@ -20,6 +20,7 @@ git checkout yep
 
     * [GFPGANv1.4](https://huggingface.co/hacksider/deep-live-cam/resolve/main/GFPGANv1.4.pth)
     * [inswapper\_128.onnx](https://huggingface.co/ezioruan/inswapper_128.onnx/blob/main/inswapper_128.onnx)
+    * [inswapper\_128\_fp16.onnx](https://huggingface.co/hacksider/deep-live-cam/resolve/main/inswapper_128_fp16.onnx)
 
 * Place below folder in the "C:\Users\<user-name>\.insightface\models\" folder.
 
