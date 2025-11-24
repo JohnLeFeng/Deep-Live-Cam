@@ -71,22 +71,15 @@ def get_face_swapper() -> Any:
             try:
                 if "OpenVINOExecutionProvider" in modules.globals.execution_providers:
                     print ("FACE_SWAPPER - modules.globals.execution_providers: ", "OpenVINOExecutionProvider")
-                    # config_dict = {
-                    #     "GPU.1": {
-                    #         "CACHE_DIR": "./model_cache",
-                    #         "PERFORMANCE_HINT": "LATENCY"
-                    #     }
-                    # }
                     config_dict = {
-                        "NPU": {
+                        "GPU": {
                             "CACHE_DIR": "./model_cache",
-                            "PERFORMANCE_HINT": "LATENCY"
+                            # "PERFORMANCE_HINT": "LATENCY"
                         }
                     }
                     import json
                     config_json = json.dumps(config_dict)
-                    # options = {"device_type": "GPU.1", 'load_config' : config_json}
-                    options = {"device_type": "NPU", 'load_config' : config_json}
+                    options = {"device_type": "GPU", 'load_config' : config_json}
                     FACE_SWAPPER = insightface.model_zoo.get_model(model_path, providers=[("OpenVINOExecutionProvider", options)])
                 else:
                     # Ensure the providers list is correctly passed
