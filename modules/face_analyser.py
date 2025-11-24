@@ -20,25 +20,22 @@ def get_face_analyser() -> Any:
 
     if FACE_ANALYSER is None:
         if "OpenVINOExecutionProvider" in modules.globals.execution_providers:
-            # config_dict = {
-            #     "NPU": {
-            #         "CACHE_DIR": "./model_cache",
-            #         "PERFORMANCE_HINT": "LATENCY"
-            #     }
-            # }
             config_dict = {
-                # "GPU.1": {
-                "GPU.0": {
+                "GPU": {
                     "CACHE_DIR": "./model_cache",
-                    "PERFORMANCE_HINT": "LATENCY"
+                    # "PERFORMANCE_HINT": "LATENCY"
+                    "INFERENCE_PRECISION_HINT": "F32"
                 }
             }
             import json
             config_json = json.dumps(config_dict)
-            # options = {"device_type": "NPU", 'load_config' : config_json}
-            # options = {"device_type": "GPU.1", 'load_config' : config_json}
-            options = {"device_type": "GPU.0", 'load_config' : config_json}
-            FACE_ANALYSER = insightface.app.FaceAnalysis(name='buffalo_l', providers=[("OpenVINOExecutionProvider", options)])
+            options = {"device_type": "GPU", 'load_config' : config_json}
+            FACE_ANALYSER = insightface.app.FaceAnalysis(name='buffalo_m',
+                                                         allowed_modules=[
+                                                             'detection',
+                                                             'recognition'
+                                                         ],
+                                                         providers=[("OpenVINOExecutionProvider", options)])
         else:
             FACE_ANALYSER = insightface.app.FaceAnalysis(name='buffalo_l', providers=modules.globals.execution_providers)
         FACE_ANALYSER.prepare(ctx_id=0, det_size=(640, 640))
